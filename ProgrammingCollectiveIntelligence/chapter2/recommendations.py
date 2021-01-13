@@ -111,7 +111,7 @@ def getRecommendations(prefs,person,similarityMetric=pearson_correlation):
     return rankings
 
 # 将物品与人员对调
-def transformPrefe(prefs):
+def transformPrefs(prefs):
   result ={}
   for person in prefs:
     for item in prefs[person]:
@@ -119,15 +119,73 @@ def transformPrefe(prefs):
       result[item][person] = prefs[person][item]
   return result
 
+
+# 构造物品比较数据集
+def calculateSimilarItems(prefs,n=10):
+    # 建立字典，以给出与这些物品最为相近的所有其他物品
+    result = {}
+
+    # 以物品为中心对偏好矩阵进行倒置处理
+    itemPrefs = transformPrefs(prefs)
+    c = 0
+    for item in itemPrefs:
+    # 针对大数据集更新状态变量
+      c += 1
+      if c % 100 == 0:print("%d / %d" % (c,len(itemPrefs)))
+
+      # 寻找最为相近的物品
+      scores = topMatches(itemPrefs,item,n=n,similarityMetric=euclidean_distance)
+      result[item] = scores
+    return result
+
+# 获得推荐
+def getRecommendedItems(prefs,itemMatch,user):
+    userRating = prefs[user]
+    scores = {}
+    totalSim = {}
+
+    # 循环遍历与当前物品相似的物品
+    for item,rating in userRating.items():
+       # 循环遍历与当前物品相似的商品
+      for similarity,item2 in itemMatch[item]:
+        # 如果该用户已经对当前物品做过评价，则将其忽略
+        if item2 in userRating:continue
+
+        # 评价值与相似度的加权之和
+        scores.setdefault(item2,0)
+        scores[item2] += similarity * rating
+
+        # 全部相似度之和
+        totalSim.setdefault(item2,0)
+        totalSim[item2] +=similarity
+
+    # 将每个合计值除以加权和，求出平均值
+    ranking = [(score/totalSim[item],item) for item,score in scores.items()]
+
+    # 按最高值到最低值的顺序，返回结果
+    ranking.sort()
+    ranking.reverse()
+    return ranking
+
+# 基于物品的协作过滤和基于用户的协作过滤
+# 在拥有大量数据集的情况下，基于物品的协作过滤能够得出更好的结论
+# 而且允许将大量计算任务预先执行
 if __name__ == '__main__':
+
   # 寻找相同爱好的评价者
-  print(topMatches(critics,"Toby"))
+  # print(topMatches(critics,"Toby"))
   # 为指定评价者推荐影片
-  print(getRecommendations(critics,"Toby"))
+  # print(getRecommendations(critics,"Toby"))
   # 人和物对调
-  result = transformPrefe(critics)
+  # result = transformPrefs(critics)
   # 反向寻找相同类型的影片
-  print(topMatches(result,"Superman Returns"))
+  # print(topMatches(result,"Superman Returns"))
   # 为影片推荐相似爱好的评论者
-  print(getRecommendations(result,"Just My Luck"))
+  # print(getRecommendations(result,"Just My Luck"))
+
+  # 基于物品的协作过滤
+  result =calculateSimilarItems(critics)
+  print(result)
+  # print(getRecommendedItems(critics,result,'Toby'))
+
 
