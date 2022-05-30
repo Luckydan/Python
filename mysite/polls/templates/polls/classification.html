@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block main %}
+    {% for article in article_list %}
+        <article class="post post-{{ article.pk }}">
+            <header class="entry-header">
+                <h1 class="entry-title">
+                    <a href="{% url 'polls:articleDetail' article.id %}">{{ article.title }}</a>
+                </h1>
+                <div class="entry-meta">
+                    <span class="post-category"><a href="#">{{ article.classification }}</a></span>
+                    <span class="post-date"><a href="#"><time class="entry-date"
+                                                              datetime="2012-11-09T23:15:57+00:00">
+                        {{ article.pub_date }}
+                    </time></a></span>
+                    <span class="post-author"><a href="#">{{ article.author }}</a></span>
+                    <span class="comments-link"><a href="#">{{ article.commentCount }} 评论</a></span>
+                    <span class="views-count"><a href="#">{{ article.readCount }} 阅读</a></span>
+                </div>
+            </header>
+            <div class="entry-content clearfix">
+                <p>{{ article.introduction }}</p>
+                <div class="read-more cl-effect-14">
+                    <a href="{% url 'polls:articleDetail' article.id %}" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
+                </div>
+            </div>
+        </article>
+    {% empty %}
+        <div class="no-post">暂时还没有发布的文章！</div>
+    {% endfor %}
+        <!-- 简单分页效果
+        <div class="pagination-simple">
+            <a href="#">上一页</a>
+            <span class="current">第 6 页 / 共 11 页</span>
+            <a href="#">下一页</a>
+        </div>
+        -->
+        <div class="pagination">
+            <ul>
+                <li><a href="">1</a></li>
+                <li><a href="">...</a></li>
+                <li><a href="">4</a></li>
+                <li><a href="">5</a></li>
+                <li class="current"><a href="">6</a></li>
+                <li><a href="">7</a></li>
+                <li><a href="">8</a></li>
+                <li><a href="">...</a></li>
+                <li><a href="">11</a></li>
+            </ul>
+        </div>
+{% endblock main %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django_test</title>
+</head>
+<body>
+    <div>
+        {% if latest_question_list %}
+        <ul>
+        {% for question in latest_question_list %}
+{#            <li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>#}
+{#            去除12行模板中的硬编码#}
+            <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+            <p>No polls are available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{# 侧边栏按月份进行博客归档 #}
+<div class="widget widget-archives">
+  <h3 class="widget-title">归档</h3>
+  <ul>
+    {% for date in date_list %}
+      <li>
+        <a href="{% url 'polls:archive' date.year date.month %}">{{ date.year }} 年 {{ date.month }} 月</a>
+      </li>
+    {% empty %}
+      暂无归档！
+    {% endfor %}
+  </ul>
+</div>

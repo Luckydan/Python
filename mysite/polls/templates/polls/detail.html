@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question Detail</title>
+</head>
+<body>
+{#    {{ question }}#}
+    <h1>{{ question.question_text }}</h1>
+    <ul>
+        {% for choice in question.choice_set.all %}
+        <li>{{ choice.choice_text  }}</li>
+        {% endfor %}
+    </ul>
+    <HR align=center width='100%' color=#987cb9 SIZE=1>
+    <HR style="FILTER:progid:DXImageTransform.Microsoft.Shadow(color:#987cb9,direction:145,strength:15)"width="100%" color=#987cb9 SIZE=1>
+    <HR style="FILTER:alpha(opacity=100,finishopacity=0,style=3)" width="100%"color=#987cb9 SIZE=1>
+    <form action="{% url 'polls:vote' question.id %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend><h1>{{ question.question_text }}</h1></legend>
+            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            {% for choice in question.choice_set.all %}
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id}}"/>
+                <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+            {% endfor %}
+        </fieldset>
+        <input type="submit" value="Vote"/>
+    </form>
+</body>
+</html>

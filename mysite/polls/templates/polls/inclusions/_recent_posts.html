@@ -1,0 +1,13 @@
+{# 侧边栏显示最新的文档 #}
+<div class="widget widget-recent-posts">
+  <h3 class="widget-title">最新文章</h3>
+  <ul>
+    {% for article in recent_blog_list %}
+      <li>
+        <a href="{% url 'polls:articleDetail' article.id %}">{{ article.title }}</a>
+      </li>
+    {% empty %}
+      暂无文章！
+    {% endfor %}
+  </ul>
+</div>
