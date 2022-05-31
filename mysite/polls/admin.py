@@ -19,8 +19,8 @@ class ArticleDetailAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    fields = ['article','comment_text','comment_pub_date']
-    list_display = ['article','comment_text','comment_pub_date','comment_user']
+    fields = ['article','comment_text','email','url','name']
+    list_display = ['article','comment_text','comment_pub_date','name','url']
 
     def save_model(self, request, obj, form, change):
         obj.comment_user = request.user

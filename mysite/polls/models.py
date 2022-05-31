@@ -100,10 +100,12 @@ class Comment(models.Model):
     article = models.ForeignKey(Article,on_delete=models.CASCADE)
     comment_text = models.CharField(max_length=200)
     comment_pub_date = models.DateTimeField('comment published')
-    comment_user = models.CharField(verbose_name='用户',max_length=100,default="用户%s" %random.randrange(100))
+    name = models.CharField(verbose_name='名称',max_length=100,default="用户%s" %random.randrange(100))
+    url =  models.URLField('网站',blank=True)
+    email = models.EmailField('邮箱')
 
     def __str__(self):
-        return self.comment_text
+        return '{}: {}'.format(self.name, self.comment_text[:20])
 
     class Meta:
         verbose_name = '评论'
